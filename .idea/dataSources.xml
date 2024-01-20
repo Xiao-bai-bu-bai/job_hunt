@@ -8,7 +8,7 @@
       <jdbc-url>jdbc:mysql://localhost:3306/school</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="Django default" uuid="ba95cbd5-1681-4422-b970-bdd039b03c7c">
+    <data-source source="LOCAL" name="Django default" uuid="eac88777-9754-44b3-9e92-388125ec6b11">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <imported>true</imported>

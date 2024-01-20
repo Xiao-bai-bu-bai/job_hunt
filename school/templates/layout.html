@@ -31,9 +31,9 @@
                     <li><a href={% url "student_list_name" %}>学生管理</a></li>
                     <li><a href={% url 'enterprise_list_name' %}>企业管理</a></li>
                 {% elif request.info_dict.limits == 0 %}
-                    <li><a href="#">第一届招聘会</a></li>
-                    <li><a href="#">第二届招聘会</a></li>
-                    <li><a href="#">第三届招聘会</a></li>
+                    <li><a href="{% url 'student_first_job_fair_name' %}">第一届招聘会</a></li>
+                    <li><a href="{% url 'student_second_job_fair_name' %}">第二届招聘会</a></li>
+                    <li><a href="{% url 'student_third_job_fair_name' %}">第三届招聘会</a></li>
                 {% elif request.info_dict.limits == 2 %}
                     <li><a href="#">河南工业大学招聘</a></li>
                     <li><a href="#">郑州大学招聘</a></li>

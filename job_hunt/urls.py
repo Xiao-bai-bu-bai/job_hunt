@@ -39,6 +39,10 @@ urlpatterns = [
     path("student/add/", student_views.student_add, name='student_add_name'),
     path("student/edit/", student_views.student_edit, name='student_edit_name'),
     path("student/delete/", student_views.student_delete, name='student_delete_name'),
+    path("student/first/job/fair/", student_views.student_first_job_fair, name='student_first_job_fair_name'),
+    path("student/second/job/fair/", student_views.student_second_job_fair, name='student_second_job_fair_name'),
+    path("student/third/job/fair/", student_views.student_third_job_fair, name='student_third_job_fair_name'),
+    path("student/send/resume/", student_views.student_send_resume, name='student_send_resume_name'),
 
 
     path("enterprise/list/", enterprise_views.enterprise_list, name='enterprise_list_name'),
@@ -46,4 +50,5 @@ urlpatterns = [
     path("enterprise/add/", enterprise_views.enterprise_add, name='enterprise_add_name'),
     path("enterprise/edit/", enterprise_views.enterprise_edit, name='enterprise_edit_name'),
     path("enterprise/delete/", enterprise_views.enterprise_delete, name='enterprise_delete_name'),
+
 ]

@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div style="margin-bottom: 10px; display: flex; align-items: center;">
+        <form method="get" action="{% url 'enterprise_query_name' %}" style="margin-left: 10px;">
+            <label>
+                <input type="text" name="qn" value="{{ query }}" placeholder="查询企业名称">
+            </label>
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索
+            </button>
+        </form>
+    </div>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>企业名称</th>
+            <th>企业地址</th>
+            <th>企业电话</th>
+            <th>企业邮箱</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>简历</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for enterprise in third_job_fair_object %}
+            <tr>
+                <td>{{ enterprise.name }}</td>
+                <td>{{ enterprise.address }}</td>
+                <td>{{ enterprise.phone }}</td>
+                <td>{{ enterprise.email }}</td>
+                <td>{{ enterprise.start_time }}</td>
+                <td>{{ enterprise.end_time }}</td>
+                <td>{{ enterprise.jianli }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
