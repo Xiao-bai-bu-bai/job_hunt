@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生求职管理系统</title>
+    <link rel="stylesheet" href="{% static 'Plugins/bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
+    {% block css %} {% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/home/">学生求职管理系统</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                {% if request.info_dict.limits == 1 %}
+                    <li><a href="{% url 'major_list_name' %}">专业管理</a></li>
+                    <li><a href={% url "student_list_name" %}>学生管理</a></li>
+                    <li><a href={% url 'enterprise_list_name' %}>企业管理</a></li>
+                {% elif request.info_dict.limits == 0 %}
+                    <li><a href="#">第一届招聘会</a></li>
+                    <li><a href="#">第二届招聘会</a></li>
+                    <li><a href="#">第三届招聘会</a></li>
+                {% elif request.info_dict.limits == 2 %}
+                    <li><a href="#">河南工业大学招聘</a></li>
+                    <li><a href="#">郑州大学招聘</a></li>
+                    <li><a href="#">北京大学大学招聘</a></li>
+                    <li><a href="#">清华大学大学招聘</a></li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{{ request.info_dict.name }} <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/admin/edit/{{ request.info_dict.id }}/">个人资料</a></li>
+                        <li><a href="/edit/password/">修改密码</a></li>
+                        <li><a href="javascript:void(0);" onclick="deleteAction({{ request.info_dict.id }});">注销</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="/logout/">退出</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+{#删除提示框#}
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <button type="button" class="close"></button>
+            <h4>是否确定删除</h4>
+            <p style="margin:20px 0px;">删除后的后果可是很严重的
+            <p>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">确 认</button>
+                <button type="button" class="btn btn-default" onclick="consoleDelete()">不我在想想</button>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    {% block content %} {% endblock %}
+</div>
+
+<script src="{% static 'js/code.jquery.com_jquery-3.7.1.min.js' %}"></script>
+<script src="{% static 'Plugins/bootstrap-3.4.1-dist/js/bootstrap.min.js' %}"></script>
+{% block js %}
+    <script>
+        {#当前要删除的ID#}
+        DELETE_ID = 0
+
+        function deleteAction(id) {
+            DELETE_ID = id;
+            console.log(id);
+            $('#myModal').modal('show');
+        }
+
+        function confirmDelete() {
+            $.ajax({
+                url: "/admin/delete/",
+                type: "GET",
+                data: {
+                    aid: DELETE_ID
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.status) {
+                        //删除成功，刷新页面
+                        window.location.href = "/login/";
+                    } else {
+                        alert(res.error);
+                    }
+                }
+            })
+        }
+
+        function consoleDelete() {
+            DELETE_ID = 0;
+            $('#myModal').modal('hide');
+        }
+    </script>
+{% endblock %}
+
+
+</body>
+</html>
