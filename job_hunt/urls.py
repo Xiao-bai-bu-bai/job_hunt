@@ -29,9 +29,11 @@ urlpatterns = [
     path("major/add/", school_views.major_add, name='major_add_name'),
     path("major/edit/", school_views.major_edit, name='major_edit_name'),
     path("major/delete/", school_views.major_delete, name='major_delete_name'),
-    # path("add/", school_views.add),
     path("student/logon/", school_views.student_logon, name='student_logon_name'),
     path("enterprise/logon/", school_views.enterprise_logon, name='enterprise_logon_name'),
+    path("school/list/", school_views.school_list, name='school_list_name'),
+    path("school/query/", school_views.school_query, name='school_query_name'),
+    path("school/add/", school_views.school_add, name='school_add_name'),
 
 
     path("student/list/", student_views.student_list, name='student_list_name'),

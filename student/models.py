@@ -10,7 +10,7 @@ class Student(models.Model):
     gender = models.IntegerField(verbose_name='性别',
                                  choices=[(1, '男'), (2, '女')],
                                  default=1)
-    jianli = models.FileField(verbose_name='简历', upload_to='media/', blank=True, null=True)
+    jianli = models.FileField(verbose_name='简历', upload_to='jianli/', blank=True, null=True)
     major = models.ForeignKey(
         verbose_name='专业',
         to='school.Major',
@@ -19,8 +19,15 @@ class Student(models.Model):
         default=1  # 设置默认值为 None
     )
     limits = models.IntegerField(verbose_name='权限',
-                                 choices=[(0, '学生'), (1, '管理员'), (2, '企业')],
+                                 choices=[(0, '学生'), (1, '管理员'), (2, '企业'), (3, '学校')],
                                  default=0,
                                  )
+    school = models.ForeignKey(
+        verbose_name='学校',
+        to='school.School',
+        on_delete=models.SET_NULL,
+        null=True,  # 允许外键字段为空
+        default=1  # 设置默认值为 None
+    )
 
 

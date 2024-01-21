@@ -28,9 +28,9 @@ class Migration(migrations.Migration):
                 ("email", models.CharField(max_length=32, verbose_name="企业邮箱")),
                 ("password", models.CharField(max_length=64, verbose_name="企业密码")),
                 (
-                    "media",
+                    "jianli",
                     models.FileField(
-                        blank=True, null=True, upload_to="media/", verbose_name="简历"
+                        blank=True, null=True, upload_to="jianli/", verbose_name="简历"
                     ),
                 ),
             ],

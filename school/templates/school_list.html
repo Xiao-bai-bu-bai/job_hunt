@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div style="margin-bottom: 10px; display: flex; align-items: center;">
+        <a class="btn btn-success" href="{% url 'school_add_name' %}">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加学校</a>
+
+        <form method="get" action="{% url 'school_query_name' %}" style="margin-left: 10px;">
+            <label>
+                <input type="text" name="qn" value="{{ query }}" placeholder="查询学校名称">
+            </label>
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索
+            </button>
+        </form>
+    </div>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>学校名称</th>
+            <th>学校地址</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for school in school_objects %}
+            <tr>
+                <td>{{ school.name }}</td>
+                <td>{{ school.address }}</td>
+                <td>
+                    <a href="/major/delete/?aid={{ major.id }}" class="btn btn-warning">删除</a>
+                    <a href="/major/edit/?aid={{ major.id }}" class="btn btn-danger">修改</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

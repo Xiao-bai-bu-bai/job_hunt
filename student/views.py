@@ -8,6 +8,7 @@ from enterprise.models import Enterprise
 
 
 class StudentModelForm(forms.ModelForm):
+    """学生表单"""
     class Meta:
         model = models.Student
         fields = '__all__'
@@ -122,5 +123,8 @@ def student_send_resume(request):
         with open(file_path, "wb") as f:
             for i in rec_file.chunks():  # 生成器chunks()方法是对文件进行分块读取，防止文件过大导致内存溢出
                 f.write(i)
+
+        enterprise_instance = Enterprise(jianli=rec_file)
+        enterprise_instance.save()
 
         return redirect("/student/list/")

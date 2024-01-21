@@ -20,6 +20,7 @@ class LoginForm(forms.Form):
 
 class StudentModelForm(forms.ModelForm):
     """学生注册表单"""
+
     class Meta:
         model = Student
         fields = ['Student_ID', 'password', 'name', 'age', 'gender', 'major']
@@ -34,6 +35,7 @@ class StudentModelForm(forms.ModelForm):
 
 class EnterpriseModelForm(forms.ModelForm):
     """企业注册表单"""
+
     class Meta:
         model = Enterprise
         fields = ['name', 'password', 'address', 'phone', 'email']
@@ -48,9 +50,25 @@ class EnterpriseModelForm(forms.ModelForm):
 
 class MajorModelForm(forms.ModelForm):
     """专业表单"""
+
     class Meta:
         model = models.Major
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # 自定义操作，找到所有的字段
+        for name, field_object in self.fields.items():
+            field_object.widget.attrs = {"class": 'form-control'}
+
+
+class SchoolModelForm(forms.ModelForm):
+    """学校表单"""
+
+    class Meta:
+        model = models.School
+        fields = ['name', 'address', 'limits', 'password']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -82,7 +100,8 @@ def login(request):
     if admin_object:
         user_info = {'name': admin_object.username, 'limits': admin_object.limits}
     elif student_object:
-        user_info = {'name': student_object.name, 'limits': student_object.limits}
+        user_info = {'name': student_object.name, 'limits': student_object.limits,
+                     'school': student_object.school.name}  # 外键不可以直接序列化因此要加.name
     elif enterprise_object:
         user_info = {'name': enterprise_object.name, 'limits': enterprise_object.limits}
 
@@ -101,12 +120,12 @@ def home(request):
 
 from django.urls import reverse
 
+
 def logout(request):
     """退出登录"""
     if 'info' in request.session:
         del request.session['info']
     return redirect(reverse('login_name'))
-
 
 
 def major_list(request):
@@ -187,3 +206,34 @@ def enterprise_logon(request):
             return render(request, "enterprise_logon.html", {"form": form})
         form.save()
         return redirect("/login/")
+
+
+def school_list(request):
+    """学校列表"""
+    school_objects = models.School.objects.all()
+    return render(request, "school_list.html", {"school_objects": school_objects})
+
+
+def school_query(request):
+    """学校名称查询"""
+    query = request.GET.get('qn')
+    school_objects = models.School.objects.all()
+    if query:
+        school_objects = models.School.objects.filter(
+            name__icontains=query
+        )
+    return render(request, "school_list.html", {"school_objects": school_objects})
+
+
+def school_add(request):
+    """添加学校"""
+    if request.method == "GET":
+        form = SchoolModelForm()
+        return render(request, "school_form.html", {"form": form})
+    if request.method == "POST":
+        form = SchoolModelForm(data=request.POST)
+        if not form.is_valid():
+            return render(request, "school_form.html", {"form": form})
+        form.save()
+        return redirect("/school/list/")
+    return render(request, "school_form.html")
