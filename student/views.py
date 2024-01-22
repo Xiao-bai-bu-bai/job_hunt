@@ -9,9 +9,10 @@ from enterprise.models import Enterprise
 
 class StudentModelForm(forms.ModelForm):
     """学生表单"""
+
     class Meta:
         model = models.Student
-        fields = '__all__'
+        fields = ['Student_ID', 'name', 'password', 'age', 'gender', 'major', 'school', 'limits']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

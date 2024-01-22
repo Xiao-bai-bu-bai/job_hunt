@@ -26,7 +26,7 @@
             <th>企业邮箱</th>
             <th>开始时间</th>
             <th>结束时间</th>
-            <th>简历</th>
+            <th>招收专业</th>
             <th>编辑</th>
         </tr>
         </thead>
@@ -39,7 +39,7 @@
                 <td>{{ enterprise.email }}</td>
                 <td>{{ enterprise.start_time }}</td>
                 <td>{{ enterprise.end_time }}</td>
-                <td>{{ enterprise.jianli }}</td>
+                <td>{{ enterprise.major.name }}</td>
                 <td>
                     <a href="/enterprise/delete/?aid={{ enterprise.id }}" class="btn btn-warning">删除</a>
                     <a href="/enterprise/edit/?aid={{ enterprise.id }}" class="btn btn-danger">修改</a>

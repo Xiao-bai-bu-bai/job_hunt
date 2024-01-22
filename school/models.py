@@ -17,7 +17,7 @@ class Admin(models.Model):
 
 class Major(models.Model):
     """专业表"""
-    name = models.CharField(verbose_name='专业名称', max_length=32)
+    name = models.CharField(verbose_name='专业名称', max_length=32, unique=False)
 
     def __str__(self):
         return self.name
@@ -41,14 +41,12 @@ class SchoolMajor(models.Model):
     """学校专业表"""
     school = models.ForeignKey(verbose_name='学校',
                                to='School',
-                               on_delete=models.SET_NULL,
-                               null=True,  # 允许外键字段为空
+                               on_delete=models.CASCADE,
                                default=1  # 设置默认值为 None
                                )
     major = models.ForeignKey(verbose_name='专业',
                               to='Major',
-                              on_delete=models.SET_NULL,
-                              null=True,  # 允许外键字段为空
+                              on_delete=models.CASCADE,
                               default=1  # 设置默认值为 None
                               )
 

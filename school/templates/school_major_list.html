@@ -3,10 +3,10 @@
 {% block content %}
 
     <div style="margin-bottom: 10px; display: flex; align-items: center;">
-        <a class="btn btn-success" href="{% url 'major_add_name' %}">
+        <a class="btn btn-success" href="{% url 'school_major_add_name' %}">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加专业</a>
 
-        <form method="get" action="{% url 'major_query_name' %}" style="margin-left: 10px;">
+        <form method="get" action="{% url 'school_major_query_name' %}" style="margin-left: 10px;">
             <label>
                 <input type="text" name="qn" value="{{ query }}" placeholder="查询专业名称">
             </label>
@@ -20,19 +20,19 @@
     <table class="table table-striped">
         <thead>
         <tr>
+            <th>ID</th>
             <th>专业名称</th>
-            <th>开设学校</th>
-            <th>操作</th>
+            <th>编辑</th>
         </tr>
         </thead>
         <tbody>
-        {% for major in major_objects %}
+        {% for major in school_major_objects %}
             <tr>
-                <td>{{ major.major.name }}</td>
-                <td>{{ major.school.name }}</td>
+                <td>{{ major.id }}</td>
+                <td>{{ major.name }}</td>
                 <td>
-                    <a href="/major/delete/?aid={{ major.major.id }}" class="btn btn-warning">删除</a>
-                    <a href="{% url 'major_edit_name' %}?aid={{ major.major.id }}" class="btn btn-danger">修改</a>
+                    <a href="/major/delete/?aid={{ major.id }}" class="btn btn-warning">删除</a>
+                    <a href="/major/edit/?aid={{ major.id }}" class="btn btn-danger">修改</a>
                 </td>
             </tr>
         {% endfor %}

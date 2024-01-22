@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div style="margin-bottom: 10px; display: flex; align-items: center;">
+        <a class="btn btn-success" href="{% url 'school_student_add_name' %}">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加学生</a>
+
+        <form method="get" action="{% url 'student_query_name' %}" style="margin-left: 10px;">
+            <label>
+                <input type="text" name="qn" value="{{ query }}" placeholder="查询学生姓名">
+            </label>
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索
+            </button>
+        </form>
+    </div>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>学号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>专业</th>
+            <th>编辑</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for student in student_objects %}
+            <tr>
+                <td>{{ student.Student_ID }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.age }}</td>
+                <td>{{ student.gender }}</td>
+                <td>{{ student.major.name }}</td>
+                <td>
+                    <a href="/student/delete/?aid={{ student.Student_ID }}" class="btn btn-warning">删除</a>
+                    <a href="{% url 'school_student_edit_name' %}?aid={{ student.Student_ID }}" class="btn btn-danger">修改</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

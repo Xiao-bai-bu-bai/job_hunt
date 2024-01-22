@@ -7,8 +7,8 @@ from enterprise import models
 class EnterpriseModelForm(forms.ModelForm):
     class Meta:
         model = models.Enterprise
-        # fields = ['name', 'address', 'phone', 'email', 'media', 'start_time', 'end_time']
-        fields = '__all__'
+        fields = ['name', 'address', 'phone', 'email', 'password', 'limits', 'start_time', 'end_time', 'major']
+        # fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

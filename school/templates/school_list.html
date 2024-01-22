@@ -31,8 +31,8 @@
                 <td>{{ school.name }}</td>
                 <td>{{ school.address }}</td>
                 <td>
-                    <a href="/major/delete/?aid={{ major.id }}" class="btn btn-warning">删除</a>
-                    <a href="/major/edit/?aid={{ major.id }}" class="btn btn-danger">修改</a>
+                    <a href="{% url 'school_delete_name' %}?aid={{ school.id }}" class="btn btn-warning">删除</a>
+                    <a href="{% url 'school_edit_name' %}?aid={{ school.id }}" class="btn btn-danger">修改</a>
                 </td>
             </tr>
         {% endfor %}
