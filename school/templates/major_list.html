@@ -20,6 +20,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
+            <th>序号</th>
             <th>专业名称</th>
             <th>开设学校</th>
             <th>操作</th>
@@ -28,6 +29,7 @@
         <tbody>
         {% for major in major_objects %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ major.major.name }}</td>
                 <td>{{ major.school.name }}</td>
                 <td>

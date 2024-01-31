@@ -17,6 +17,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
+            <th>序号</th>
             <th>企业名称</th>
             <th>企业地址</th>
             <th>企业电话</th>
@@ -29,6 +30,7 @@
         <tbody>
         {% for enterprise in first_job_fair_object %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ enterprise.name }}</td>
                 <td>{{ enterprise.address }}</td>
                 <td>{{ enterprise.phone }}</td>
@@ -36,7 +38,7 @@
                 <td>{{ enterprise.start_time }}</td>
                 <td>{{ enterprise.end_time }}</td>
                 <td>
-                    <a href="{% url 'student_send_resume_name' %}" class="btn btn-warning">投递</a>
+                    <a href="{% url 'student_send_resume_name' %}?aid={{ enterprise.id }}" class="btn btn-warning">投递</a>
                 </td>
             </tr>
         {% endfor %}

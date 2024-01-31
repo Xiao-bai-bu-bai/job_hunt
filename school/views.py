@@ -100,7 +100,22 @@ class SchoolStudentModelForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['Student_ID', 'name', 'password', 'age', 'gender', 'major']
+        fields = ['name', 'password', 'age', 'gender', 'major']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # 自定义操作，找到所有的字段
+        for name, field_object in self.fields.items():
+            field_object.widget.attrs = {"class": 'form-control'}
+
+
+class SchoolEnterpriseModelForm(forms.ModelForm):
+    """学校企业表单"""
+
+    class Meta:
+        model = models.SchoolEnterprise
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -134,7 +149,7 @@ def login(request):
         user_info = {'name': admin_object.username, 'limits': admin_object.limits}
     elif student_object:
         user_info = {'name': student_object.name, 'limits': student_object.limits,
-                     'school': student_object.school.name}  # 外键不可以直接序列化因此要加.name
+                     "student_id": student_object.Student_ID, 'school': student_object.school.name}  # 外键不可以直接序列化因此要加.name
     elif enterprise_object:
         user_info = {'name': enterprise_object.name, 'limits': enterprise_object.limits}
     elif school_object:
@@ -376,4 +391,73 @@ def school_student_edit(request):
         if not form.is_valid():
             return render(request, "student_form.html", {"form": form})
         form.save()
-        return redirect("/student/list/")
+        return redirect(reverse('student_list_name'))
+
+
+def school_enterprise_list(request):
+    """学校企业列表"""
+    # 判断当前用户是学校用户还是管理员用户
+    if request.session['info']['limits'] == 3:
+        enterprise_objects = models.SchoolEnterprise.objects.filter(school__name=request.session['info']['name'])
+        return render(request, "school_enterprise_list.html", {"enterprise_objects": enterprise_objects})
+    else:
+        enterprise_objects = models.SchoolEnterprise.objects.all()
+        return render(request, "admin_school_enterprise_list.html", {"enterprise_objects": enterprise_objects})
+
+
+def school_enterprise_add(request):
+    """学校添加企业"""
+    if request.method == "GET":
+        form = SchoolEnterpriseModelForm()
+        return render(request, "enterprise_form.html", {"form": form})
+    if request.method == "POST":
+        form = SchoolEnterpriseModelForm(data=request.POST)
+        if not form.is_valid():
+            return render(request, "enterprise_form.html", {"form": form})
+        form.save()
+        return redirect(reverse('school_enterprise_list_name'))
+
+
+def school_enterprise_edit(request):
+    """学校编辑企业"""
+    aid = request.GET.get('aid')
+    enterprise_object = models.SchoolEnterprise.objects.filter(id=aid).first()
+    if request.method == "GET":
+        form = SchoolEnterpriseModelForm(instance=enterprise_object)
+        return render(request, "enterprise_form.html", {"form": form})
+    if request.method == "POST":
+        form = SchoolEnterpriseModelForm(data=request.POST, instance=enterprise_object)
+        if not form.is_valid():
+            return render(request, "enterprise_form.html", {"form": form})
+        form.save()
+        return redirect(reverse('school_enterprise_list_name'))
+
+
+def school_enterprise_query(request):
+    """学校企业名称查询"""
+    query = request.GET.get('qn')
+    query2 = request.GET.get('qn2')
+    # 判断当前用户是学校用户还是管理员用户
+    if request.session['info']['limits'] == 3:
+        enterprise_objects = models.SchoolEnterprise.objects.filter(school__name=request.session['info']['name'])
+        if query:
+            enterprise_objects = enterprise_objects.filter(
+                enterprise__name__icontains=query
+            )
+        return render(request, "school_enterprise_list.html", {"enterprise_objects": enterprise_objects})
+
+    else:
+        enterprise_objects = models.SchoolEnterprise.objects.all()
+        if query or query2:
+            enterprise_objects = enterprise_objects.filter(
+                enterprise__name__icontains=query,
+                school__name__icontains=query2
+            )
+        return render(request, "admin_school_enterprise_list.html", {"enterprise_objects": enterprise_objects})
+
+
+def school_enterprise_delete(request):
+    """删除学校企业"""
+    aid = request.GET.get("aid")
+    models.SchoolEnterprise.objects.filter(id=aid).delete()
+    return redirect(reverse('school_enterprise_list_name'))

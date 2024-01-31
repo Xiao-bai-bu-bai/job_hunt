@@ -20,7 +20,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>ID</th>
+            <th>序号</th>
             <th>专业名称</th>
             <th>编辑</th>
         </tr>
@@ -28,7 +28,7 @@
         <tbody>
         {% for major in school_major_objects %}
             <tr>
-                <td>{{ major.id }}</td>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ major.name }}</td>
                 <td>
                     <a href="/major/delete/?aid={{ major.id }}" class="btn btn-warning">删除</a>

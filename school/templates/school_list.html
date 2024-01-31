@@ -20,6 +20,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
+            <th>序号</th>
             <th>学校名称</th>
             <th>学校地址</th>
             <th>操作</th>
@@ -28,6 +29,7 @@
         <tbody>
         {% for school in school_objects %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ school.name }}</td>
                 <td>{{ school.address }}</td>
                 <td>

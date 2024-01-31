@@ -8,7 +8,6 @@ class Enterprise(models.Model):
     phone = models.CharField(verbose_name='企业电话', max_length=32)
     email = models.CharField(verbose_name='企业邮箱', max_length=32)
     password = models.CharField(verbose_name='企业密码', max_length=64)
-    jianli = models.FileField(verbose_name='简历', upload_to='jianli/', blank=True, null=True)
     limits = models.IntegerField(verbose_name='权限',
                                  choices=[(0, '学生'), (1, '管理员'), (2, '企业'), (3, '学校')],
                                  default=2,
@@ -22,3 +21,6 @@ class Enterprise(models.Model):
         null=True,  # 允许外键字段为空
         default=1  # 设置默认值为 None
     )
+
+    def __str__(self):
+        return self.name

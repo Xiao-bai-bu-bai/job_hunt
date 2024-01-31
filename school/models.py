@@ -52,3 +52,22 @@ class SchoolMajor(models.Model):
 
     def __str__(self):
         return self.school.name + self.major.name
+
+
+class SchoolEnterprise(models.Model):
+    """学校企业表"""
+    school = models.ForeignKey(verbose_name='学校',
+                               to='School',
+                               on_delete=models.CASCADE,
+                               null=True,  # 允许外键字段为空
+                               default=1  # 设置默认值为 None
+                               )
+    enterprise = models.ForeignKey(verbose_name='企业',
+                                   to='enterprise.Enterprise',
+                                   on_delete=models.CASCADE,
+                                   null=True,  # 允许外键字段为空
+                                   default=1  # 设置默认值为 None
+                                   )
+
+    def __str__(self):
+        return self.school.name + self.enterprise.name

@@ -5,6 +5,7 @@ from django.shortcuts import render, HttpResponse, redirect
 
 from student import models
 from enterprise.models import Enterprise
+from student.models import Student
 
 
 class StudentModelForm(forms.ModelForm):
@@ -110,8 +111,8 @@ def student_third_job_fair(request):
     return render(request, "third_job_fair.html", {"third_job_fair_object": third_job_fair_object})
 
 
-def student_send_resume(request):
-    """发送简历"""
+def student_upload_resume(request):
+    """上传简历"""
     if request.method == "GET":
         form = EnterpriseResumeModelForm()
         return render(request, "send_resume.html", {"form": form})
@@ -125,7 +126,37 @@ def student_send_resume(request):
             for i in rec_file.chunks():  # 生成器chunks()方法是对文件进行分块读取，防止文件过大导致内存溢出
                 f.write(i)
 
-        enterprise_instance = Enterprise(jianli=rec_file)
-        enterprise_instance.save()
+        # 上传的简历存储到Student表当前用户的jianli中
+        student_id = request.info_dict['student_id']
+        student_object = Student.objects.filter(Student_ID=student_id).first()
+        student_object.jianli = rec_file
+        student_object.save()
 
         return redirect("/student/list/")
+
+
+# 查看简历
+def student_check_resume(request):
+    """查看简历"""
+    student_id = request.info_dict['student_id']
+    student_object = Student.objects.filter(Student_ID=student_id).first()
+    file_path = student_object.jianli
+    return render(request, "student_check_resume.html", {"file_path": file_path})
+
+
+# 投递简历，把本人的简历复制一份，存储到以企业名称命名的文件夹中
+def student_send_resume(request):
+    """投递简历"""
+    student_id = request.info_dict['student_id']
+    student_object = Student.objects.filter(Student_ID=student_id).first()
+    file_path = student_object.jianli
+    aid = request.GET.get('aid')
+    enterprise_object = Enterprise.objects.filter(id=aid).first()
+    enterprise_name = enterprise_object.name
+    print(enterprise_name)
+    # 复制本人的简历文件到以企业名称命名的文件夹中
+    new_file_path = os.path.join(settings.MEDIA_ROOT, enterprise_name, file_path.name).replace("\\", "/")
+    with open(new_file_path, "wb") as f:
+        for i in file_path.chunks():
+            f.write(i)
+    return HttpResponse("投递成功！")

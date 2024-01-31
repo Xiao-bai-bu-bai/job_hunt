@@ -3,8 +3,8 @@
 {% block content %}
 
     <div style="margin-bottom: 10px; display: flex; align-items: center;">
-        <a class="btn btn-success" href="{% url 'school_student_add_name' %}">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加学生</a>
+{#        <a class="btn btn-success" href="{% url 'school_student_add_name' %}">#}
+{#            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加学生</a>#}
 
         <form method="get" action="{% url 'student_query_name' %}" style="margin-left: 10px;">
             <label>
@@ -20,6 +20,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
+            <th>序号</th>
             <th>学号</th>
             <th>姓名</th>
             <th>年龄</th>
@@ -31,10 +32,11 @@
         <tbody>
         {% for student in student_objects %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ student.Student_ID }}</td>
                 <td>{{ student.name }}</td>
                 <td>{{ student.age }}</td>
-                <td>{{ student.gender }}</td>
+                <td>{{ student.get_gender_display }}</td>
                 <td>{{ student.major.name }}</td>
                 <td>
                     <a href="/student/delete/?aid={{ student.Student_ID }}" class="btn btn-warning">删除</a>

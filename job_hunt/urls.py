@@ -14,12 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.views.static import serve
+
+from job_hunt import settings
 from school import views as school_views
 from student import views as student_views
 from enterprise import views as enterprise_views
 
 urlpatterns = [
+    # 配置上传文件的访问处理函数
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
     path("admin/", admin.site.urls),
     path("login/", school_views.login, name='login_name'),  # 登录
     path("home/", school_views.home, name='home_name'),  # 首页
@@ -44,6 +49,15 @@ urlpatterns = [
     path("school/major/edit/", school_views.school_major_edit, name='school_major_edit_name'),  # 学校专业编辑
     path("school/major/query/", school_views.school_major_query, name='school_major_query_name'),  # 学校专业名称查询
 
+    # 学校企业列表
+    path("school/enterprise/list/", school_views.school_enterprise_list, name='school_enterprise_list_name'),  # 学校企业列表
+    path("school/enterprise/add/", school_views.school_enterprise_add, name='school_enterprise_add_name'),  # 学校企业添加
+    path("school/enterprise/edit/", school_views.school_enterprise_edit, name='school_enterprise_edit_name'),  # 学校企业编辑
+    path("school/enterprise/query/", school_views.school_enterprise_query, name='school_enterprise_query_name'),
+    # 学校企业名称查询
+    path("school/enterprise/delete/", school_views.school_enterprise_delete, name='school_enterprise_delete_name'),
+    # 学校企业删除
+    # path("admin/school/enterprise/list/", school_views.admin_school_enterprise_list, name='admin_school_enterprise_list_name'),  # 管理员学校企业列表
 
     path("student/list/", student_views.student_list, name='student_list_name'),  # 学生列表
     path("student/query/", student_views.student_query, name='student_query_name'),  # 学生名称查询
@@ -51,8 +65,12 @@ urlpatterns = [
     path("student/edit/", student_views.student_edit, name='student_edit_name'),  # 编辑学生
     path("student/delete/", student_views.student_delete, name='student_delete_name'),  # 删除学生
     path("student/first/job/fair/", student_views.student_first_job_fair, name='student_first_job_fair_name'),  # 第一次招聘会
-    path("student/second/job/fair/", student_views.student_second_job_fair, name='student_second_job_fair_name'),  # 第二次招聘会
+    path("student/second/job/fair/", student_views.student_second_job_fair, name='student_second_job_fair_name'),
+    # 第二次招聘会
     path("student/third/job/fair/", student_views.student_third_job_fair, name='student_third_job_fair_name'),  # 第三次招聘会
+    # path("student/send/resume/", student_views.student_send_resume, name='student_send_resume_name'),  # 学生投递简历
+    path("student/upload/resume/", student_views.student_upload_resume, name='student_upload_resume_name'),  # 学生上传简历
+    path("student/check/resume", student_views.student_check_resume, name='student_check_resume_name'),  # 学生查看简历
     path("student/send/resume/", student_views.student_send_resume, name='student_send_resume_name'),  # 学生投递简历
 
     path("enterprise/list/", enterprise_views.enterprise_list, name='enterprise_list_name'),  # 企业列表

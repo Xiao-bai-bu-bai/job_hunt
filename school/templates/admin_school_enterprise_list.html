@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div style="margin-bottom: 10px; display: flex; align-items: center;">
+        <a class="btn btn-success" href="{% url 'school_enterprise_add_name' %}">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加招聘</a>
+
+        <form method="get" action="{% url 'school_enterprise_query_name' %}" style="margin-left: 10px;">
+            <label>
+                <input type="text" name="qn" value="{{ query }}" placeholder="查询企业名称">
+            </label>
+            <label>
+                <input type="text" name="qn2" value="{{ query2 }}" placeholder="查询学校名称">
+            </label>
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索
+            </button>
+        </form>
+
+    </div>
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>学校名称</th>
+            <th>企业名称</th>
+            <th>编辑</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for enterprise in enterprise_objects %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ enterprise.school.name }}</td>
+                <td>{{ enterprise.enterprise.name }}</td>
+                <td>
+                    <a href="{% url 'school_enterprise_delete_name' %}?aid={{ enterprise.id }}" class="btn btn-warning">删除</a>
+                    <a href="{% url 'school_enterprise_edit_name' %}?aid={{ enterprise.id }}" class="btn btn-danger">修改</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
