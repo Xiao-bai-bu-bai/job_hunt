@@ -1,5 +1,6 @@
 from django import forms
 from django.shortcuts import render, HttpResponse, redirect
+from django.urls import reverse
 
 from enterprise import models
 
@@ -70,3 +71,39 @@ def enterprise_delete(request):
     aid = request.GET.get("aid")
     models.Enterprise.objects.filter(id=aid).delete()
     return redirect("/enterprise/list/")
+
+
+def enterprise_check_resume(request):
+    """企业查看简历列表"""
+    # 获取登录的企业id
+    enterprise_id = request.info_dict['enterprise_id']
+    student_enterprise_object0 = models.StudentEnterprise.objects.filter(enterprise_id=enterprise_id, status=0).all()
+    return render(request, "enterprise_check_resume.html", {"student_enterprise_object0": student_enterprise_object0})
+
+
+def enterprise_resume_pass(request):
+    """简历通过"""
+    aid = request.GET.get("aid")
+    models.StudentEnterprise.objects.filter(id=aid).update(status=1)
+    return redirect(reverse("enterprise_check_resume_name"))
+
+
+def enterprise_resume_not_pass(request):
+    """简历不通过"""
+    aid = request.GET.get("aid")
+    models.StudentEnterprise.objects.filter(id=aid).update(status=2)
+    return redirect(reverse("enterprise_check_resume_name"))
+
+
+def enterprise_resume_pass_list(request):
+    """查看通过的简历列表"""
+    enterprise_id = request.info_dict['enterprise_id']
+    student_enterprise_object1 = models.StudentEnterprise.objects.filter(enterprise_id=enterprise_id, status=1).all()
+    return render(request, "enterprise_resume_pass.html", {"student_enterprise_object1": student_enterprise_object1})
+
+
+def enterprise_resume_not_pass_list(request):
+    """查看未通过的简历列表"""
+    enterprise_id = request.info_dict['enterprise_id']
+    student_enterprise_object2 = models.StudentEnterprise.objects.filter(enterprise_id=enterprise_id, status=2).all()
+    return render(request, "enterprise_resume_not_pass.html", {"student_enterprise_object2": student_enterprise_object2})

@@ -78,5 +78,10 @@ urlpatterns = [
     path("enterprise/add/", enterprise_views.enterprise_add, name='enterprise_add_name'),  # 添加企业
     path("enterprise/edit/", enterprise_views.enterprise_edit, name='enterprise_edit_name'),  # 编辑企业
     path("enterprise/delete/", enterprise_views.enterprise_delete, name='enterprise_delete_name'),  # 删除企业
+    path("enterprise/check/resume/", enterprise_views.enterprise_check_resume, name='enterprise_check_resume_name'),  # 企业查看简历
+    path("enterprise/resume/pass/", enterprise_views.enterprise_resume_pass, name='enterprise_resume_pass_name'),  # 简历通过
+    path("enterprise/resume/not/pass/", enterprise_views.enterprise_resume_not_pass, name='enterprise_resume_not_pass_name'),  # 简历未通过
+    path("enterprise/resume/pass/list/", enterprise_views.enterprise_resume_pass_list, name='enterprise_resume_pass_list_name'),  # 查看通过的简历
+    path("enterprise/resume/not/pass/list/", enterprise_views.enterprise_resume_not_pass_list, name='enterprise_resume_not_pass_list_name'),  # 查看未通过的简历
 
 ]

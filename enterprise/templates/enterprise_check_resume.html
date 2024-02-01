@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>学生姓名</th>
+            <th>查看简历</th>
+            <th>通过</th>
+            <th>放入人才库</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ob in student_enterprise_object0 %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ ob.student.name }}</td>
+                <td>
+                    <a href="{% url 'media' ob.student.jianli %}" target="_blank" class="btn btn-warning">查看</a>
+                </td>
+                <td>
+                    <a href={% url 'enterprise_resume_pass_name' %}?aid={{ ob.id }} class="btn btn-success">√</a>
+                </td>
+                <td>
+                    <a href={% url 'enterprise_resume_not_pass_name' %}?aid={{ ob.id }} class="btn btn-toolbar">o(╥﹏╥)o</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

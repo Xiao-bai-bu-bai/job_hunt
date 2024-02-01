@@ -151,7 +151,8 @@ def login(request):
         user_info = {'name': student_object.name, 'limits': student_object.limits,
                      "student_id": student_object.Student_ID, 'school': student_object.school.name}  # 外键不可以直接序列化因此要加.name
     elif enterprise_object:
-        user_info = {'name': enterprise_object.name, 'limits': enterprise_object.limits}
+        user_info = {'name': enterprise_object.name, 'limits': enterprise_object.limits,
+                     'enterprise_id': enterprise_object.id}
     elif school_object:
         user_info = {'name': school_object.name, 'limits': school_object.limits}
 

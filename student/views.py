@@ -4,7 +4,7 @@ from django.conf import settings
 from django.shortcuts import render, HttpResponse, redirect
 
 from student import models
-from enterprise.models import Enterprise
+from enterprise.models import Enterprise, StudentEnterprise
 from student.models import Student
 
 
@@ -144,7 +144,6 @@ def student_check_resume(request):
     return render(request, "student_check_resume.html", {"file_path": file_path})
 
 
-# 投递简历，把本人的简历复制一份，存储到以企业名称命名的文件夹中
 def student_send_resume(request):
     """投递简历"""
     student_id = request.info_dict['student_id']
@@ -153,10 +152,14 @@ def student_send_resume(request):
     aid = request.GET.get('aid')
     enterprise_object = Enterprise.objects.filter(id=aid).first()
     enterprise_name = enterprise_object.name
-    print(enterprise_name)
-    # 复制本人的简历文件到以企业名称命名的文件夹中
+    # 企业名称文件夹不存在则创建
+    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, enterprise_name, "jianli")):
+        os.mkdir(os.path.join(settings.MEDIA_ROOT, enterprise_name, "jianli"))
     new_file_path = os.path.join(settings.MEDIA_ROOT, enterprise_name, file_path.name).replace("\\", "/")
     with open(new_file_path, "wb") as f:
         for i in file_path.chunks():
             f.write(i)
+    # 学生企业表中添加数据
+    student_enterprise_object = StudentEnterprise.objects.create(student_id=student_id, enterprise_id=aid)
+    student_enterprise_object.save()
     return HttpResponse("投递成功！")

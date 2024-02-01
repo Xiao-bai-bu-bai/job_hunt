@@ -37,7 +37,9 @@
                 <td>{{ enterprise.email }}</td>
                 <td>{{ enterprise.start_time }}</td>
                 <td>{{ enterprise.end_time }}</td>
-                <td>{{ enterprise.jianli }}</td>
+                <td>
+                    <a href="{% url 'student_send_resume_name' %}?aid={{ enterprise.id }}" class="btn btn-warning">投递</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

@@ -34,15 +34,14 @@
                     <li><a href={% url 'school_enterprise_list_name' %}>招聘管理</a></li>
                 {% elif request.info_dict.limits == 0 %}
                     <li><a href="{% url 'student_upload_resume_name' %}">{{ request.info_dict.school }}</a></li>
-                    <li><a href="{% url 'student_first_job_fair_name' %}">第一届招聘会</a></li>
                     <li><a href="{% url 'student_check_resume_name' %}">查看本人简历</a></li>
+                    <li><a href="{% url 'student_first_job_fair_name' %}">第一届招聘会</a></li>
                     <li><a href="{% url 'student_second_job_fair_name' %}">第二届招聘会</a></li>
                     <li><a href="{% url 'student_third_job_fair_name' %}">第三届招聘会</a></li>
                 {% elif request.info_dict.limits == 2 %}
-                    <li><a href="#">河南工业大学招聘</a></li>
-                    <li><a href="#">郑州大学招聘</a></li>
-                    <li><a href="#">北京大学大学招聘</a></li>
-                    <li><a href="#">清华大学大学招聘</a></li>
+                    <li><a href={% url 'enterprise_check_resume_name' %}>查看投递</a></li>
+                    <li><a href={% url 'enterprise_resume_pass_list_name' %}>通过简历</a></li>
+                    <li><a href={% url 'enterprise_resume_not_pass_list_name' %}>人才库简历</a></li>
                 {% elif request.info_dict.limits == 3 %}
                     <li><a href="{% url 'school_student_list_name' %}">学生管理</a></li>
                     {#                    <li><a href="{% url 'school_major_list_name' %}">专业管理</a></li>#}

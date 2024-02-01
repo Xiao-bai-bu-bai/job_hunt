@@ -1,5 +1,6 @@
 from django.db import models
 from school.models import Major
+from student.models import Student
 
 
 class Enterprise(models.Model):
@@ -24,3 +25,29 @@ class Enterprise(models.Model):
 
     def __str__(self):
         return self.name
+
+
+# 创建中间表连接Student表与enterorise表，如果通过则为1，否则为2，未被查看为0
+class StudentEnterprise(models.Model):
+    """学生企业表"""
+    student = models.ForeignKey(
+        verbose_name='学生',
+        to='student.Student',
+        on_delete=models.CASCADE,
+        null=True,  # 允许外键字段为空
+        default=1  # 设置默认值为 None
+    )
+    enterprise = models.ForeignKey(
+        verbose_name='企业',
+        to='Enterprise',
+        on_delete=models.CASCADE,
+        null=True,  # 允许外键字段为空
+        default=1  # 设置默认值为 None
+    )
+    status = models.IntegerField(verbose_name='状态',
+                                 choices=[(0, '未查看'), (1, '通过'), (2, '未通过')],
+                                 default=0,
+                                 )
+
+    def __str__(self):
+        return self.student.name + self.enterprise.name
