@@ -7,6 +7,8 @@ from enterprise.models import Enterprise
 from school.models import Major as SM
 from school.models import SchoolMajor as M
 
+from student.views import get_paginated_data
+
 
 class LoginForm(forms.Form):
     """登录表单"""
@@ -149,7 +151,8 @@ def login(request):
         user_info = {'name': admin_object.username, 'limits': admin_object.limits}
     elif student_object:
         user_info = {'name': student_object.name, 'limits': student_object.limits,
-                     "student_id": student_object.Student_ID, 'school': student_object.school.name}  # 外键不可以直接序列化因此要加.name
+                     "student_id": student_object.Student_ID,
+                     'school': student_object.school.name}  # 外键不可以直接序列化因此要加.name
     elif enterprise_object:
         user_info = {'name': enterprise_object.name, 'limits': enterprise_object.limits,
                      'enterprise_id': enterprise_object.id}
@@ -310,7 +313,9 @@ def enterprise_logon(request):
 def school_list(request):
     """学校列表"""
     school_objects = models.School.objects.all()
-    return render(request, "school_list.html", {"school_objects": school_objects})
+    cons = get_paginated_data(request, school_objects, 7)
+
+    return render(request, "school_list.html", locals())
 
 
 def school_query(request):
@@ -364,7 +369,9 @@ def school_delete(request):
 def school_student_list(request):
     """学校学生列表"""
     student_objects = Student.objects.filter(school__name=request.session['info']['name'])
-    return render(request, "school_student_list.html", {"student_objects": student_objects})
+    cons = get_paginated_data(request, student_objects, 7)
+
+    return render(request, "school_student_list.html", locals())
 
 
 def school_student_add(request):
@@ -400,10 +407,12 @@ def school_enterprise_list(request):
     # 判断当前用户是学校用户还是管理员用户
     if request.session['info']['limits'] == 3:
         enterprise_objects = models.SchoolEnterprise.objects.filter(school__name=request.session['info']['name'])
-        return render(request, "school_enterprise_list.html", {"enterprise_objects": enterprise_objects})
+        cons = get_paginated_data(request, enterprise_objects, 7)
+        return render(request, "school_enterprise_list.html", locals())
     else:
         enterprise_objects = models.SchoolEnterprise.objects.all()
-        return render(request, "admin_school_enterprise_list.html", {"enterprise_objects": enterprise_objects})
+        cons = get_paginated_data(request, enterprise_objects, 7)
+        return render(request, "admin_school_enterprise_list.html", locals())
 
 
 def school_enterprise_add(request):

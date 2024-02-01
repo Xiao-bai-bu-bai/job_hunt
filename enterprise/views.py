@@ -3,6 +3,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.urls import reverse
 
 from enterprise import models
+from student.views import get_paginated_data
 
 
 class EnterpriseModelForm(forms.ModelForm):
@@ -22,7 +23,8 @@ class EnterpriseModelForm(forms.ModelForm):
 def enterprise_list(request):
     """企业列表"""
     enterprise_object = models.Enterprise.objects.all()
-    return render(request, "enterprise_list.html", {"enterprise_object": enterprise_object})
+    cons = get_paginated_data(request, enterprise_object, 7)
+    return render(request, "enterprise_list.html", locals())
 
 
 def enterprise_query(request):
@@ -78,7 +80,9 @@ def enterprise_check_resume(request):
     # 获取登录的企业id
     enterprise_id = request.info_dict['enterprise_id']
     student_enterprise_object0 = models.StudentEnterprise.objects.filter(enterprise_id=enterprise_id, status=0).all()
-    return render(request, "enterprise_check_resume.html", {"student_enterprise_object0": student_enterprise_object0})
+    cons = get_paginated_data(request, student_enterprise_object0, 7)
+
+    return render(request, "enterprise_check_resume.html", locals())
 
 
 def enterprise_resume_pass(request):
@@ -99,11 +103,15 @@ def enterprise_resume_pass_list(request):
     """查看通过的简历列表"""
     enterprise_id = request.info_dict['enterprise_id']
     student_enterprise_object1 = models.StudentEnterprise.objects.filter(enterprise_id=enterprise_id, status=1).all()
-    return render(request, "enterprise_resume_pass.html", {"student_enterprise_object1": student_enterprise_object1})
+    cons = get_paginated_data(request, student_enterprise_object1, 7)
+
+    return render(request, "enterprise_resume_pass.html", locals())
 
 
 def enterprise_resume_not_pass_list(request):
     """查看未通过的简历列表"""
     enterprise_id = request.info_dict['enterprise_id']
     student_enterprise_object2 = models.StudentEnterprise.objects.filter(enterprise_id=enterprise_id, status=2).all()
-    return render(request, "enterprise_resume_not_pass.html", {"student_enterprise_object2": student_enterprise_object2})
+    cons = get_paginated_data(request, student_enterprise_object2, 7)
+
+    return render(request, "enterprise_resume_not_pass.html", locals())

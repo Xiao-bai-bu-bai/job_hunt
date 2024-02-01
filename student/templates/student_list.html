@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'layout_list.html' %}
 
 {% block content %}
 
@@ -16,38 +16,41 @@
         </form>
     </div>
 
-
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>序号</th>
-            <th>学号</th>
-            <th>姓名</th>
-            <th>所属学校</th>
-            <th>年龄</th>
-            <th>性别</th>
-            <th>简历</th>
-            <th>专业</th>
-            <th>编辑</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for student in students_object %}
+    <div>
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ student.Student_ID }}</td>
-                <td>{{ student.name }}</td>
-                <td>{{ student.school.name }}</td>
-                <td>{{ student.age }}</td>
-                <td>{{ student.get_gender_display }}</td>
-                <td>{{ student.jianli }}</td>
-                <td>{{ student.major.name }}</td>
-                <td>
-                    <a href="/student/delete/?aid={{ student.Student_ID }}" class="btn btn-warning">删除</a>
-                    <a href="/student/edit/?aid={{ student.Student_ID }}" class="btn btn-danger">修改</a>
-                </td>
+                <th>序号</th>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>所属学校</th>
+                <th>年龄</th>
+                <th>性别</th>
+                <th>简历</th>
+                <th>专业</th>
+                <th>编辑</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for student in cons %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ student.Student_ID }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.school.name }}</td>
+                    <td>{{ student.age }}</td>
+                    <td>{{ student.get_gender_display }}</td>
+                    <td>{{ student.jianli }}</td>
+                    <td>{{ student.major.name }}</td>
+                    <td>
+                        <a href="/student/delete/?aid={{ student.Student_ID }}" class="btn btn-warning">删除</a>
+                        <a href="/student/edit/?aid={{ student.Student_ID }}" class="btn btn-danger">修改</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
 {% endblock %}

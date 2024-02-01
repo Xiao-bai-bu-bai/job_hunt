@@ -7,6 +7,8 @@ from student import models
 from enterprise.models import Enterprise, StudentEnterprise
 from student.models import Student
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 class StudentModelForm(forms.ModelForm):
     """学生表单"""
@@ -38,10 +40,27 @@ class EnterpriseResumeModelForm(forms.ModelForm):
             field_object.widget.attrs = {"class": 'form-control'}
 
 
+def get_paginated_data(request, queryset, items_per_page):
+    """分页"""
+    page = request.GET.get('page')
+    paginator = Paginator(queryset, items_per_page)
+
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
+
+    return data
+
+
 def student_list(request):
     """学生列表"""
     students_object = models.Student.objects.all()
-    return render(request, "student_list.html", {"students_object": students_object})
+    cons = get_paginated_data(request, students_object, 7)
+
+    return render(request, "student_list.html", locals())
 
 
 def student_query(request):
@@ -94,21 +113,26 @@ def student_first_job_fair(request):
     """第一次招聘会的企业"""
     first_job_fair_object = Enterprise.objects.filter(start_time__gte="2023-07-01 00:00:00.000000",
                                                       end_time__lte="2023-11-02 00:00:00.000000")
-    return render(request, "first_job_fair.html", {"first_job_fair_object": first_job_fair_object})
+    cons = get_paginated_data(request, first_job_fair_object, 7)
+
+    return render(request, "first_job_fair.html", locals())
 
 
 def student_second_job_fair(request):
     """第二次招聘会的企业"""
     second_job_fair_object = Enterprise.objects.filter(start_time__gte="2023-07-01 00:00:00.000000",
                                                        end_time__lte="2024-03-02 00:00:00.000000")
-    return render(request, "second_job_fair.html", {"second_job_fair_object": second_job_fair_object})
+    cons = get_paginated_data(request, second_job_fair_object, 7)
+    return render(request, "second_job_fair.html", locals())
 
 
 def student_third_job_fair(request):
     """第三次招聘会的企业"""
     third_job_fair_object = Enterprise.objects.filter(start_time__gte="2023-07-01 00:00:00.000000",
                                                       end_time__lte="2024-07-02 00:00:00.000000")
-    return render(request, "third_job_fair.html", {"third_job_fair_object": third_job_fair_object})
+    cons = get_paginated_data(request, third_job_fair_object, 7)
+
+    return render(request, "third_job_fair.html", locals())
 
 
 def student_upload_resume(request):

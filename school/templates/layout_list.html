@@ -84,6 +84,40 @@
 
 <div class="container">
     {% block content %} {% endblock %}
+    {# 分页 #}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {# 首页按钮，固定page=1 #}
+            <li><a href='?page=1'>首页</a></li>
+            {# 如果上一页还有数据，那么让其可继续点击进入上一页 #}
+            {% if cons.has_previous %}
+                <li><a href="?page={{ cons.previous_page_number }}" data-ey_fc35fdc="html"
+                       data-tmp="1">上一页</a>
+                </li>
+                {# 如果上一页没有数据了，那么不让做任何操作 #}
+            {% else %}
+            {% endif %}
+
+            {# 由后端经逻辑判断后的page_range页数列表进行迭代 #}
+            {% for num in cons.paginator.page_range %}
+                {# 如果循环的页码与当前查看的页码相等，那么就让其高亮显示 #}
+                {% if num == cons.number %}
+                    <li class="thisclass"><a>{{ num }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ num }}" data-ey_fc35fdc="html" data-tmp="1">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {# 如果当前页还有下一页，那么让其可以点击进入下一页 #}
+            {% if cons.has_next %}
+                <li><a href="?page={{ cons.next_page_number }}" data-ey_fc35fdc="html"
+                       data-tmp="1">下一页</a></li>
+            {% endif %}
+
+            {# 跳转到尾页，让page参数直接等于总页数 #}
+            <li><a href='?page={{ paginator.num_pages }}'>尾页</a></li>
+        </ul>
+    </nav>
 </div>
 
 
