@@ -2,10 +2,10 @@ import os
 from django import forms
 from django.conf import settings
 from django.shortcuts import render, HttpResponse, redirect
+from django.urls import reverse
 
 from student import models
 from enterprise.models import Enterprise, StudentEnterprise
-from student.models import Student
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -71,7 +71,8 @@ def student_query(request):
         students_object = models.Student.objects.filter(
             name__icontains=query
         )
-    return render(request, "student_list.html", {"students_object": students_object})
+    cons = get_paginated_data(request, students_object, 7)
+    return render(request, "student_list.html", locals())
 
 
 def student_add(request):
@@ -111,8 +112,8 @@ def student_delete(request):
 
 def student_first_job_fair(request):
     """第一次招聘会的企业"""
-    first_job_fair_object = Enterprise.objects.filter(start_time__gte="2023-07-01 00:00:00.000000",
-                                                      end_time__lte="2023-11-02 00:00:00.000000")
+    first_job_fair_object = Enterprise.objects.filter(start_time__gte="2023-09-01 00:00:00.000000",
+                                                      end_time__lte="2023-11-01 00:00:00.000000")
     cons = get_paginated_data(request, first_job_fair_object, 7)
 
     return render(request, "first_job_fair.html", locals())
@@ -120,16 +121,16 @@ def student_first_job_fair(request):
 
 def student_second_job_fair(request):
     """第二次招聘会的企业"""
-    second_job_fair_object = Enterprise.objects.filter(start_time__gte="2023-07-01 00:00:00.000000",
-                                                       end_time__lte="2024-03-02 00:00:00.000000")
+    second_job_fair_object = Enterprise.objects.filter(start_time__gte="2023-11-01 00:00:00.000000",
+                                                       end_time__lte="2024-03-01 00:00:00.000000")
     cons = get_paginated_data(request, second_job_fair_object, 7)
     return render(request, "second_job_fair.html", locals())
 
 
 def student_third_job_fair(request):
     """第三次招聘会的企业"""
-    third_job_fair_object = Enterprise.objects.filter(start_time__gte="2023-07-01 00:00:00.000000",
-                                                      end_time__lte="2024-07-02 00:00:00.000000")
+    third_job_fair_object = Enterprise.objects.filter(start_time__gte="2024-03-01 00:00:00.000000",
+                                                      end_time__lte="2024-04-30 00:00:00.000000")
     cons = get_paginated_data(request, third_job_fair_object, 7)
 
     return render(request, "third_job_fair.html", locals())
@@ -145,25 +146,33 @@ def student_upload_resume(request):
         if not rec_file:
             return HttpResponse("请选择文件")
 
-        file_path = os.path.join(settings.MEDIA_ROOT, "jianli", rec_file.name)
-        with open(file_path, "wb") as f:
-            for i in rec_file.chunks():  # 生成器chunks()方法是对文件进行分块读取，防止文件过大导致内存溢出
-                f.write(i)
+        # 将之前保存的简历文件对象从学生对象中移除
+        student_id = request.info_dict['student_id']
+        student_object = models.Student.objects.filter(Student_ID=student_id).first()
+        if student_object.jianli:
+            # 如果之前有保存的简历文件，删除之
+            old_file_path = os.path.join(settings.MEDIA_ROOT, student_object.jianli.name).replace("\\", "/")
+            os.remove(old_file_path)
+
+        # file_path = os.path.join(settings.MEDIA_ROOT, rec_file.name)
+        # with open(file_path, "wb") as f:
+        #     for i in rec_file.chunks():  # 生成器chunks()方法是对文件进行分块读取，防止文件过大导致内存溢出
+        #         f.write(i)
 
         # 上传的简历存储到Student表当前用户的jianli中
         student_id = request.info_dict['student_id']
-        student_object = Student.objects.filter(Student_ID=student_id).first()
+        student_object = models.Student.objects.filter(Student_ID=student_id).first()
         student_object.jianli = rec_file
         student_object.save()
 
-        return redirect("/student/list/")
+        return redirect(reverse("home_name"))
 
 
 # 查看简历
 def student_check_resume(request):
     """查看简历"""
     student_id = request.info_dict['student_id']
-    student_object = Student.objects.filter(Student_ID=student_id).first()
+    student_object = models.Student.objects.filter(Student_ID=student_id).first()
     file_path = student_object.jianli
     return render(request, "student_check_resume.html", {"file_path": file_path})
 
@@ -171,14 +180,14 @@ def student_check_resume(request):
 def student_send_resume(request):
     """投递简历"""
     student_id = request.info_dict['student_id']
-    student_object = Student.objects.filter(Student_ID=student_id).first()
+    student_object = models.Student.objects.filter(Student_ID=student_id).first()
     file_path = student_object.jianli
     aid = request.GET.get('aid')
     enterprise_object = Enterprise.objects.filter(id=aid).first()
     enterprise_name = enterprise_object.name
     # 企业名称文件夹不存在则创建
-    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, enterprise_name, "jianli")):
-        os.mkdir(os.path.join(settings.MEDIA_ROOT, enterprise_name, "jianli"))
+    if not os.path.exists(os.path.join(settings.MEDIA_ROOT, enterprise_name, "media")):
+        os.mkdir(os.path.join(settings.MEDIA_ROOT, enterprise_name, "media"))
     new_file_path = os.path.join(settings.MEDIA_ROOT, enterprise_name, file_path.name).replace("\\", "/")
     with open(new_file_path, "wb") as f:
         for i in file_path.chunks():

@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RemoveField(
             model_name="enterprise",
-            name="jianli",
+            name="media",
         ),
         migrations.CreateModel(
             name="StudentEnterprise",

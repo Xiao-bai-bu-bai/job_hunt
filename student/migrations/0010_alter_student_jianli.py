@@ -12,9 +12,9 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name="student",
-            name="jianli",
+            name="media",
             field=models.FileField(
-                blank=True, null=True, upload_to="jianli/", verbose_name="简历"
+                blank=True, null=True, upload_to="media/", verbose_name="简历"
             ),
         ),
     ]

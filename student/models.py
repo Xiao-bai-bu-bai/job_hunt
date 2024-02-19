@@ -10,7 +10,7 @@ class Student(models.Model):
     gender = models.IntegerField(verbose_name='性别',
                                  choices=[(1, '男'), (2, '女')],
                                  default=1)
-    jianli = models.FileField(verbose_name='简历', upload_to='jianli/', blank=True, null=True)
+    jianli = models.FileField(verbose_name='简历', upload_to='media/', blank=True, null=True)
     major = models.ForeignKey(
         verbose_name='专业',
         to='school.Major',

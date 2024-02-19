@@ -31,9 +31,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "jianli",
+                    "media",
                     models.FileField(
-                        blank=True, null=True, upload_to="jianli/", verbose_name="简历"
+                        blank=True, null=True, upload_to="media/", verbose_name="简历"
                     ),
                 ),
                 (

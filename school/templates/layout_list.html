@@ -5,10 +5,21 @@
     <meta charset="UTF-8">
     <title>学生求职管理系统</title>
     <link rel="stylesheet" href="{% static 'Plugins/bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
+    <style>
+        body {
+            background: url("{% static 'imgs/2.jpg' %}") no-repeat;
+            background-size: cover;
+        }
+    </style>
     {% block css %} {% endblock %}
 </head>
 <body>
-
+<style>
+    .navbar-default {
+        background-color: rgba(255, 255, 255, 0.5);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+</style>
 <nav class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->

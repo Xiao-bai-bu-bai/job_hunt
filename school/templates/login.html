@@ -7,18 +7,30 @@
     <link rel="stylesheet" href="{% static 'Plugins/bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
     <style>
         .login-box {
-            width: 400px;
+            width: 350px;
             margin-left: auto;
             margin-right: auto;
             border: 1px solid white;
-            margin-top: 140px;
+            margin-top: 100px;
             padding: 0 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.2);
+
+        }
+        body {
+            background-image: url("{% static 'imgs/1.jpg' %}");
+            background-size: cover;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-position: center;
+            height: 100%;
         }
     </style>
 
 </head>
 <body>
+<div>
+    <h1 style="text-align: center; color: coral">欢迎登录学生求职系统</h1>
+</div>
 <div class="login-box">
     <h2>用户登录</h2>
     <form method="post" novalidate>

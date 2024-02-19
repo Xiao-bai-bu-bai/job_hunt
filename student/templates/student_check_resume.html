@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
+{% load static %}
 {% block content %}
-    <li><a href="{% url 'media' file_path %}" target="_blank">查看本人简历</a></li>
+    <li><a href="{% url 'media' file_path %}" target="_blank">
+
+        <img src="{% static 'imgs/3.jpeg' %}" alt="{{ file_path }}" style="display: block; margin: 0 auto;" width="800" height="500">
+    </a></li>
 
 {% endblock %}

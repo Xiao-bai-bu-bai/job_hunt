@@ -127,3 +127,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # 自定义配置
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')  # 设置静态文件路径为主目录下的media文件夹
 MEDIA_URL = '/media/'
+
+# 配置静态文件路径
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
